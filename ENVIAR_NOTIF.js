@@ -143,48 +143,35 @@ function getKey(year,level){
   var keySheetName = SpreadsheetApp.getActiveSpreadsheet().getSheets()[1].getName();
   var sheet = ss.setActiveSheet(ss.getSheetByName(keySheetName).activate());
   
-  var firstKeyCellName = getKeyCell(year,level, sheet);
-  var firstKeyCell = sheet.getRange(firstKeyCellName);
-  
-  var key = new Array();
-  for (var k = 0; k<ss.getLastColumn();k++){
-    var keyCells = firstKeyCell.offset(0,k).getValue();
-    key.push(keyCells);
-  }
-  
+  var firstkeyRow = getFirstKeyRow(year,level,sheet)
+  var key = sheet.getSheetValues(firstkeyRow, 3, 1, 30)
   Logger.log("\n"+'key :'+key+"\n");
-  
+
   return key;
 }
 
-function getKeyCell(year, level, sheet){
-  yearRow = getYearRow(year,sheet);
-  lvlRow = getLevelRow(level, yearCell, sheet);
-  return "C"+lvlRow;;
+function getFirstKeyRow(year, level, sheet){
+  var yearRow = getYearRow(year,sheet);
+  var lvlRow = getLevelRow(level, yearRow);
+  return lvlRow;
 }
 
 function getYearRow(requestedYear, sheet){
-  rowNum = 2
-  foundYear = sheet.getRange("A2").getValue;
+  var rowNum = 1;
+  var foundYear = sheet.getRange("A2").getValue;
   
   while(foundYear!=requestedYear){
-    foundYear = sheet.getRange("A"+rowNum.toString()).getValue();
+    foundYear = sheet.getRange("A"+rowNum).getValue();
     rowNum+=1
   }
-  return rowNum;
+  return rowNum-1;
 }
 
-function getLevelRow(requestedLevel, yearRow, sheet){
-  lvlRow = yearRow;
-  foundLvl = sheet.getRange("B"+lvlRow).getValue();
-  
-  while(foundLvl!=requestedLevel){
-    foundLvl = sheet.getRange("B"+lvlRow).getValue();
-    lvlRow+=1;
-  }
-  
-  return lvlRow;
+function getLevelRow(requestedLevel, yearRow){
+  var lvlRow = yearRow+requestedLevel;
+  return lvlRow-1;
 }
+
 
 function onOpen() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet();
