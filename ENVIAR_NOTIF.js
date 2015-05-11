@@ -138,7 +138,6 @@ function notificaMeLa() {
   //range.setBackgroundColor("red");
 }
 
-
 function getKey(year,level){
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var keySheetName = SpreadsheetApp.getActiveSpreadsheet().getSheets()[1].getName();
@@ -161,32 +160,25 @@ function getKey(year,level){
 function getKeyCell(year, level, sheet){
   yearRow = getYearRow(year,sheet);
   lvlRow = getLevelRow(level, yearCell, sheet);
-  
-  firstKeyCell = "C"+lvlRow;
-  
-  return firstKeyCell;
+  return "C"+lvlRow;;
 }
 
-function getYearRow(year, sheet){
+function getYearRow(requestedYear, sheet){
   rowNum = 2
   foundYear = sheet.getRange("A2").getValue;
   
-  var i = 0;
-  while(foundYear!=year){
+  while(foundYear!=requestedYear){
     foundYear = sheet.getRange("A"+rowNum.toString()).getValue();
     rowNum+=1
   }
-  
-  Logger.log("Test Year : "+foundYear)
   return rowNum;
 }
 
-function getLevelRow(level, yearRow, sheet){
+function getLevelRow(requestedLevel, yearRow, sheet){
   lvlRow = yearRow;
   foundLvl = sheet.getRange("B"+lvlRow).getValue();
   
-  var j = 0;
-  while(foundLvl!=level){
+  while(foundLvl!=requestedLevel){
     foundLvl = sheet.getRange("B"+lvlRow).getValue();
     lvlRow+=1;
   }
