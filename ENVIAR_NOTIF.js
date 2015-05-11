@@ -141,65 +141,58 @@ function notificaMeLa() {
 
 function getKey(year,level){
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var nomFullKey = SpreadsheetApp.getActiveSpreadsheet().getSheets()[1].getName();
-  var sheet = ss.setActiveSheet(ss.getSheetByName(nomFullKey).activate());
-  var cell = sheet.activate().getRange("A2").activate();
-  var cellLevel = sheet.activate().getRange("B2").activate();
+  var keySheetName = SpreadsheetApp.getActiveSpreadsheet().getSheets()[1].getName();
+  var sheet = ss.setActiveSheet(ss.getSheetByName(keySheetName).activate());
   
-  var anyNoTrobat = 0;
-  var anyTrobat = "";
+  var firstKeyCellName = getKeyCell(year,level, sheet);
+  var firstKeyCell = sheet.getRange(firstKeyCellName);
   
-  var nivellNoTrobat = 0;
-  var nivellTrobat = "";
-  
-  for (var i=0; i<sheet.getLastRow(); i++){
-    var cellAny = cell.offset(i, 0);
-    var any = cellAny.getValue();
-    Logger.log(any);
-    
-    if (any==year){
-      anyTrobat = any;
-      Logger.log("Ja sé de quin any és l'examen: " + anyTrobat);
-      Logger.log("Pleguem, doncs? :\)");
-      var cellNivell = cellAny.offset(0, 1);
-      break
-    } 
-    else{
-      anyNoTrobat = anyNoTrobat+1;
-    }
-  }
-    
-  for (var j=0;j<4;j++){
-    var cellNivells = cellNivell.offset(j,0);
-    var nivell = cellNivells.getValue();    
-    Logger.log(nivell);
-      
-    if(nivell==level){
-      nivellTrobat = level;
-      Logger.log("Ja sé de quin nivell és l'examen: " + nivellTrobat);
-      Logger.log("Pleguem, doncs :\)");
-      var cellFirstKey = cellNivells.offset(0, 1);
-      Logger.log(cellFirstKey.getA1Notation());
-      break
-    }
-    else{nivellNoTrobat = nivellNoTrobat+1;}      
-  }
-  
-  var firstKey = cellFirstKey.getValue();
-  var arrayKey = new Array();
+  var key = new Array();
   for (var k = 0; k<ss.getLastColumn();k++){
-    var keyCells = cellFirstKey.offset(0,k).getValue();
-    arrayKey.push(keyCells);
+    var keyCells = firstKeyCell.offset(0,k).getValue();
+    key.push(keyCells);
   }
   
-  Logger.log("\n"+arrayKey+"\n");
-  Logger.log("\nResum: \nAny: " + anyTrobat + "; Ens ha costat " + anyNoTrobat + " intents. " +
-            "\nNivell: " + nivellTrobat + "; Ens ha costat " + nivellNoTrobat + " intents. " +
-            "\nI tenim la primera lletra de la key!! : " + firstKey);
+  Logger.log("\n"+'key :'+key+"\n");
   
-  return arrayKey;
+  return key;
 }
 
+function getKeyCell(year, level, sheet){
+  yearRow = getYearRow(year,sheet);
+  lvlRow = getLevelRow(level, yearCell, sheet);
+  
+  firstKeyCell = "C"+lvlRow;
+  
+  return firstKeyCell;
+}
+
+function getYearRow(year, sheet){
+  rowNum = 2
+  foundYear = sheet.getRange("A2").getValue;
+  
+  var i = 0;
+  while(foundYear!=year){
+    foundYear = sheet.getRange("A"+rowNum.toString()).getValue();
+    rowNum+=1
+  }
+  
+  Logger.log("Test Year : "+foundYear)
+  return rowNum;
+}
+
+function getLevelRow(level, yearRow, sheet){
+  lvlRow = yearRow;
+  foundLvl = sheet.getRange("B"+lvlRow).getValue();
+  
+  var j = 0;
+  while(foundLvl!=level){
+    foundLvl = sheet.getRange("B"+lvlRow).getValue();
+    lvlRow+=1;
+  }
+  
+  return lvlRow;
+}
 
 function onOpen() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet();
