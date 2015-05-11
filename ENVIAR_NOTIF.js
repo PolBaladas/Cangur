@@ -6,15 +6,13 @@ function notificaMeLa() {
   var lastColumn = sheet.getLastColumn();
   
   var usuari = sheet.getRange(lastRow, 2).getValue();
-  var year = sheet.getRange(lastRow, 3).getValue();
-  var level = sheet.getRange(lastRow, 4).getValue();
+  var testYear = sheet.getRange(lastRow, 3).getValue();
+  var testLevel = sheet.getRange(lastRow, 4).getValue();
   var prof = sheet.getRange(lastRow, lastColumn-1).getValue();
-  var firstCellLlista = sheet.getRange(lastRow, 5);
 
-  Logger.log("Usuari: "+usuari + "\nAny: " + year + "\nNivell: " + level);
+  Logger.log("Usuari: "+usuari + "\nAny: " + testYear + "\nNivell: " + testLevel);
   
-  var llistaResults = getKey(year,level);
-  var llistaStudent = new Array();
+  var realResults = getKey(testYear,testLevel);
   var ok = 0;
   var bad = 0;
   var blank = 0;
@@ -32,20 +30,15 @@ function notificaMeLa() {
   var valor = 0;
   var notaFinal = 30;
   
-  for (var m = 0; m<30;m++){
-    var llistaCells = firstCellLlista.offset(0,m).getValue();
-    llistaStudent.push(llistaCells);
-  }
+  var studentAnswers = sheet.getSheetValues(lastRow,5,1,30) //5->1st Anwer on sheet; 1-> one row; 30-> 30 columns of data.
   
-  Logger.log(llistaStudent);
+  Logger.log(studentAnswers);
   
-  for (var n=0;n<llistaStudent.length;n++){
+  for (var n=0;n<studentAnswers.length;n++){
     var num = n+1;
     
-    if (llistaStudent[n]!=""){
-      var arrayAns = llistaResults[n].split(" ");
-      Logger.log(arrayAns);
-      if(llistaStudent[n]==arrayAns[0] || llistaStudent[n]==arrayAns[1]){  
+    if (studentAnswers[n]!=""){
+      if(realResults[n].indexOf(studentAnswers[n])<-1){  
         
         if(n>=0&&n<10){
           valor = 3;
@@ -62,7 +55,7 @@ function notificaMeLa() {
      
         ok = ok+1;
         notaFinal = notaFinal+valor;
-        resultFinal = "P"+num+": "+llistaStudent[n]+" (OK)";
+        resultFinal = "P"+num+": "+studentAnswers[n]+" (OK)";
         llistaFinal.push(resultFinal);
         llistaOk.push("P"+num);
       }
@@ -80,7 +73,7 @@ function notificaMeLa() {
         
         bad = bad+1;
         notaFinal = notaFinal-valor/4;
-        resultFinal = "** P"+num+": "+llistaStudent[n]+" ("+ llistaResults[n]+")";
+        resultFinal = "** P"+num+": "+studentAnswers[n]+" ("+ realResults[n]+")";
         llistaFinal.push(resultFinal);
         llistaBad.push("P"+num);
       }
@@ -89,7 +82,7 @@ function notificaMeLa() {
     else{
       blank = blank+1;
       notaFinal = notaFinal;
-      resultFinal = "** P"+num+": "+llistaStudent[n]+" ("+ llistaResults[n]+")";
+      resultFinal = "** P"+num+": "+studentAnswers[n]+" ("+ realResults[n]+")";
       llistaFinal.push(resultFinal);
       llistaBlank.push("P"+num);
     }
@@ -110,14 +103,14 @@ function notificaMeLa() {
   
   var txtAlumne = "Hola " + usuari + ", Acabes de resoldre una nova prova cangur "
                     +".\n\nAquesta és la teva llista de resultats: \n" +
-                    "\nAlumne/a: " + usuari + "\n\nAny de la prova: " + year + "\nNivell: " + level +
+                    "\nAlumne/a: " + usuari + "\n\nAny de la prova: " + testYear + "\nNivell: " + testLevel +
                     "\nNota final: " + notaFinal + parcials + "\n\nLlista_OK: \n"
                     + llistaOk + "\n\nLlista_Bad: \n" + llistaBad + 
                     "\n\nLlista_Blanks: \n"+ llistaBlank + "\n\nResultats: \n\n"+llistaFinal;
   
   var txtProf = "Hola " + prof + ",\n\nT'acaba d'arribar una nova entrada de la prova cangur de l'usuari "
                     +usuari+ ".\n\nAquesta és la llista dels seus resultats: \n" +
-                    "\nAlumne/a: " + usuari + "\nAny de la prova: " + year + "\nNivell: " + level +
+                    "\nAlumne/a: " + usuari + "\nAny de la prova: " + testYear + "\nNivell: " + testLevel +
                     "\nNota final: " + notaFinal + parcials + "\n\nLlista_OK: \n"
                     + llistaOk + "\n\nLlista_Bad: \n" + llistaBad + 
                     "\n\nLlista_Blanks: \n"+ llistaBlank + "\n\nResultats: \n\n"+llistaFinal;
@@ -125,7 +118,7 @@ function notificaMeLa() {
   var parcialsDoc = "\n\nRespostes correctes \(parcials\): \nPreguntes 1-10:\t" + llistaOk1.length +
             "\nPreguntes 11-20:\t" + llistaOk2.length + "\nPreguntes 21-30:\t" + llistaOk3.length;
   
-  var txtDocProf = "\nAlumne/a: " + usuari + "\nAny: " + year + "\nNivell: " + level +
+  var txtDocProf = "\nAlumne/a: " + usuari + "\nAny: " + testYear + "\nNivell: " + testLevel +
                     "\nNota final: " + notaFinal + parcialsDoc;
   
   MailApp.sendEmail(usuari,"\[NOTIFICANGUR\]: ", txtAlumne);
@@ -137,6 +130,9 @@ function notificaMeLa() {
   //var range = sheet.getRange("A9");
   //range.setBackgroundColor("red");
 }
+
+
+
 
 function getKey(year,level){
   var ss = SpreadsheetApp.getActiveSpreadsheet();
