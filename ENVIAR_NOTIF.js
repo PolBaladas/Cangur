@@ -45,7 +45,7 @@ function notificaMeLa() {
   var percentNota = (correctAnswersNum/30)*100;
   
   sendMails(usuari,prof,nota,percentNota,testYear,testLevel);
-  omplirFull(txtDocProf,prof);
+  //omplirFull(txtDocProf,prof);
 }
 
 function processAnswer(n,num){
@@ -139,17 +139,23 @@ function getLevelRow(requestedLevel, yearRow){
   return lvlRow-1;
 }
 
-function sendMails(nota, percentNota){
-
-  markers = ['%user%','%testYear%','%testLevel%','%notaFinal%',
-  '%1to10%','%11to20%','%21to30%','%blankNum%','%correctAnswer',
-  '%incorrectAnswers%','%blankAnswers%']
+function sendMails(nota, percentNota,testYear, testLevel){
+  var markers = ['%user%','%testYear%','%testLevel%','%notaFinal%',
+  '%1to10%','%11to20%','%21to30%','%blankNum%','%correctAnswers',
+  '%incorrectAnswers%','%blankAnswers%'];
+  var vars = [usuari, testYear, testLevel, notaFinal, oneValuedAnswers.length, 
+          twoValuedAnswers.length, threeValuedAnswers.length,blankAnswers.length, 
+         correctAnswers, incorrectAnswers, blankAnswers];
   
-  
-
+  var docId = '1UJCuEos8KerbxSJnl14ttTOH-zIVHm5gNybeS8Dz9xY'
+  var emailTxt = DocumentApp.openById(docId).getBody().getText();
+  for(k=0; k<markers.length; k++){
+    emailTxt.replace(markers[k], vars[k]);
+  }
+  //TODO : Different e-mails for teachers and students?
   var teacherMail = prof + "@sarria.epiaedu.cat";
-  MailApp.sendEmail(usuari,"\[NOTIFICANGUR\]: ", txtAlumne);
-  MailApp.sendEmail(teacherMail,"\[NOTIFICANGUR\]: " + usuari, txtProf);
+  MailApp.sendEmail(usuari,"\[NOTIFICANGUR\]: ", emailTxt);
+  MailApp.sendEmail(teacherMail,"\[NOTIFICANGUR\]: " + usuari, emailTxt);
 }
 
 function onOpen() {
