@@ -15,23 +15,23 @@ var resultLogChain = "";
 var valor = 0;
 var notaFinal = 30;
 
+var usuari;
+var prof;
 var studentAnswers;
 var realResults;
 
 function notificaMeLa() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.setActiveSheet(ss.getSheetByName("RECULL").activate());
-
   var lastRow = sheet.getLastRow();
   var lastColumn = sheet.getLastColumn();
-
-  var usuari = sheet.getRange(lastRow, 2).getValue();
   var testYear = sheet.getRange(lastRow, 3).getValue();
   var testLevel = sheet.getRange(lastRow, 4).getValue();
-  var prof = sheet.getRange(lastRow, lastColumn-1).getValue();
 
+  usuari = sheet.getRange(lastRow, 2).getValue();
+  prof = sheet.getRange(lastRow, lastColumn-1).getValue();
   Logger.log("Usuari: "+usuari + "\nAny: " + testYear + "\nNivell: " + testLevel);
-
+  
   realResults = getKey(testYear,testLevel);
   studentAnswers = sheet.getSheetValues(lastRow,5,1,30)[0].valueOf();
   Logger.log('studentAnswers :'+studentAnswers);
@@ -41,42 +41,10 @@ function notificaMeLa() {
     processAnswer(n,num);
   }
 
-  Logger.log(resultsCompilation+"\n");
-  Logger.log("\Ok: " + correctAnswersNum + "\nBad: " + incorrectAnswersNum);
   var nota = (correctAnswersNum/30)*10;
   var percentNota = (correctAnswersNum/30)*100;
-  Logger.log("\n\n\tNota: " + nota.toFixed(2) + " ("+ percentNota.toFixed(2) + "%)");
-  Logger.log("\n\nNota real: " + notaFinal);
-
-  var parcials = "\n\nRespostes correctes:\n\nPreguntes 1-10:\t" + oneValuedAnswers.length +
-            "\nPreguntes 11-20:\t" + twoValuedAnswers.length + "\nPreguntes 21-30:\t" + threeValuedAnswers.length +
-            "\nSense resposta: " + blankAnswers.length;
-
-  var teacherMail = prof + "@sarria.epiaedu.cat";
-
-  var txtAlumne = "Hola " + usuari + ", Acabes de resoldre una nova prova cangur "
-                    +".\n\nAquesta és la teva llista de resultats: \n" +
-                    "\nAlumne/a: " + usuari + "\n\nAny de la prova: " + testYear + "\nNivell: " + testLevel +
-                    "\nNota final: " + notaFinal + parcials + "\n\nLlista_OK: \n"
-                    + correctAnswers + "\n\nLlista_Bad: \n" + incorrectAnswers +
-                    "\n\nLlista_Blanks: \n"+ blankAnswers + "\n\nResultats: \n\n"+resultsCompilation;
-
-  var txtProf = "Hola " + prof + ",\n\nT'acaba d'arribar una nova entrada de la prova cangur de l'usuari "
-                    +usuari+ ".\n\nAquesta és la llista dels seus resultats: \n" +
-                    "\nAlumne/a: " + usuari + "\nAny de la prova: " + testYear + "\nNivell: " + testLevel +
-                    "\nNota final: " + notaFinal + parcials + "\n\nLlista_OK: \n"
-                    + correctAnswers + "\n\nLlista_Bad: \n" + incorrectAnswers +
-                    "\n\nLlista_Blanks: \n"+ blankAnswers + "\n\nResultats: \n\n"+resultsCompilation;
-
-  var parcialsDoc = "\n\nRespostes correctes \(parcials\): \nPreguntes 1-10:\t" + oneValuedAnswers.length +
-            "\nPreguntes 11-20:\t" + twoValuedAnswers.length + "\nPreguntes 21-30:\t" + threeValuedAnswers.length;
-
-  var txtDocProf = "\nAlumne/a: " + usuari + "\nAny: " + testYear + "\nNivell: " + testLevel +
-                    "\nNota final: " + notaFinal + parcialsDoc;
-
-  MailApp.sendEmail(usuari,"\[NOTIFICANGUR\]: ", txtAlumne);
-  MailApp.sendEmail(teacherMail,"\[NOTIFICANGUR\]: " + usuari, txtProf);
-
+  
+  sendMails(usuari,prof,nota,percentNota,testYear,testLevel);
   omplirFull(txtDocProf,prof);
 }
 
@@ -169,6 +137,19 @@ function getYearRow(requestedYear, sheet){
 function getLevelRow(requestedLevel, yearRow){
   var lvlRow = yearRow+requestedLevel;
   return lvlRow-1;
+}
+
+function sendMails(nota, percentNota){
+
+  markers = ['%user%','%testYear%','%testLevel%','%notaFinal%',
+  '%1to10%','%11to20%','%21to30%','%blankNum%','%correctAnswer',
+  '%incorrectAnswers%','%blankAnswers%']
+  
+  
+
+  var teacherMail = prof + "@sarria.epiaedu.cat";
+  MailApp.sendEmail(usuari,"\[NOTIFICANGUR\]: ", txtAlumne);
+  MailApp.sendEmail(teacherMail,"\[NOTIFICANGUR\]: " + usuari, txtProf);
 }
 
 function onOpen() {
