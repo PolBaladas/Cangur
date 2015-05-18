@@ -33,8 +33,8 @@ function notificaMeLa() {
   Logger.log("Usuari: "+usuari + "\nAny: " + testYear + "\nNivell: " + testLevel);
 
   realResults = getKey(testYear,testLevel);
-  studentAnswers = sheet.getSheetValues(lastRow,5,1,30) //5->1st Anwer on sheet; 1-> one row; 30-> 30 columns of data.
-  Logger.log(studentAnswers);
+  studentAnswers = sheet.getSheetValues(lastRow,5,1,30)[0].valueOf();
+  Logger.log('studentAnswers :'+studentAnswers);
 
   for (var n=0; n<studentAnswers.length; n++){
     var num = n+1;
@@ -82,8 +82,7 @@ function notificaMeLa() {
 
 function processAnswer(n,num){
   if(studentAnswers[n]!=""){
-    
-    if(realResults[n].indexOf(studentAnswers[n])<-1){       //Correct answer
+    if(studentAnswers[n]==realResults[n]){       //Correct answer
       if(n>=0 && n<10){
         valor = 3;
         oneValuedAnswers.push("P"+num);
@@ -144,7 +143,7 @@ function getKey(year,level){
   var sheet = ss.setActiveSheet(ss.getSheetByName(keySheetName).activate());
 
   var firstkeyRow = getFirstKeyRow(year,level,sheet)
-  var key = sheet.getSheetValues(firstkeyRow, 3, 1, 30)
+  var key = sheet.getSheetValues(firstkeyRow, 3, 1, 30)[0].valueOf();
   Logger.log("\n"+'key :'+key+"\n");
 
   return key;
