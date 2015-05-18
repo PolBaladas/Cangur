@@ -154,8 +154,8 @@ function sendMails(usuari, prof, nota,testYear, testLevel){
   }
   //TODO : Different e-mails for teachers and students?
   var teacherMail = prof + "@sarria.epiaedu.cat";
-  MailApp.sendEmail(usuari,"\[NOTIFICANGUR\]: ", emailTxt);
-  MailApp.sendEmail(teacherMail,"\[NOTIFICANGUR\]: " + usuari, emailTxt);
+  MailApp.sendEmail(usuari,"\[NOTIFICANGUR\]: ", '',{htmlBody:emailTxt});
+  MailApp.sendEmail(teacherMail,"\[NOTIFICANGUR\]: " + usuari, '',{htmlBody:emailTxt});
 }
 
 function onOpen() {
