@@ -28,8 +28,8 @@ function notificaMeLa() {
   var testYear = sheet.getRange(lastRow, 3).getValue();
   var testLevel = sheet.getRange(lastRow, 4).getValue();
 
-  usuariCell = sheet.getRange(lastRow, 2);
-  usuari = usuariCell.getVaue();
+  var usuariCell = sheet.getRange(lastRow, 2).getCell(1, 1);
+  var usuari = usuariCell.getValue();
   prof = sheet.getRange(lastRow, lastColumn-1).getValue();
   Logger.log("Usuari: "+usuari + "\nAny: " + testYear + "\nNivell: " + testLevel);
   
@@ -161,7 +161,9 @@ function sendMails(usuari, prof, nota,testYear, testLevel){
 }
 
 function encryptUser(userCell){
-  
+  var plain = userCell.getValue();
+  var hash = Sha256.hash(plain);
+  userCell.setValue(hash);
 }
 
 function onOpen() {
