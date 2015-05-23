@@ -29,8 +29,9 @@ function notificaMeLa() {
   var testLevel = sheet.getRange(lastRow, 4).getValue();
 
   var usuariCell = sheet.getRange(lastRow, 2).getCell(1, 1);
-  var usuari = usuariCell.getValue();
-  prof = sheet.getRange(lastRow, lastColumn-1).getValue();
+  var profCell = sheet.getRange(lastRow, lastColumn-1).getCell(1,1);
+  usuari = usuariCell.getValue();
+  prof = profCell.getValue();
   Logger.log("Usuari: "+usuari + "\nAny: " + testYear + "\nNivell: " + testLevel);
   
   realResults = getKey(testYear,testLevel);
@@ -47,7 +48,8 @@ function notificaMeLa() {
   
   sendMails(usuari,prof,nota,testYear,testLevel);
   //omplirFull(txtDocProf,prof);
-  encryptUser(usuariCell);
+  encryptData(usuariCell);
+  encryptData(profCell);
 }
 
 function processAnswer(n,num){
@@ -160,10 +162,15 @@ function sendMails(usuari, prof, nota,testYear, testLevel){
   MailApp.sendEmail(teacherMail,"\[NOTIFICANGUR\]: " + usuari, '',{htmlBody:emailTxt});
 }
 
-function encryptUser(userCell){
-  var plain = userCell.getValue();
-  var hash = Sha256.hash(plain);
-  userCell.setValue(hash);
+function generateSalt(length) {
+    return Math.round((Math.pow(36, length + 1) - Math.random() * Math.pow(36, length))).toString(36).slice(1);
+}
+
+function encryptData(dataCell){
+  var plain = dataCell.getValue();
+  var cryptoSalt = generateSalt(20);
+  var hash = Sha256.hash(plain+cryptoSalt);
+  dataCell.setValue(hash);
 }
 
 function onOpen() {
