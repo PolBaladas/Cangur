@@ -28,7 +28,8 @@ function notificaMeLa() {
   var testYear = sheet.getRange(lastRow, 3).getValue();
   var testLevel = sheet.getRange(lastRow, 4).getValue();
 
-  usuari = sheet.getRange(lastRow, 2).getValue();
+  usuariCell = sheet.getRange(lastRow, 2);
+  usuari = usuariCell.getVaue();
   prof = sheet.getRange(lastRow, lastColumn-1).getValue();
   Logger.log("Usuari: "+usuari + "\nAny: " + testYear + "\nNivell: " + testLevel);
   
@@ -46,6 +47,7 @@ function notificaMeLa() {
   
   sendMails(usuari,prof,nota,testYear,testLevel);
   //omplirFull(txtDocProf,prof);
+  encryptUser(usuariCell);
 }
 
 function processAnswer(n,num){
@@ -156,6 +158,10 @@ function sendMails(usuari, prof, nota,testYear, testLevel){
   var teacherMail = prof + "@sarria.epiaedu.cat";
   MailApp.sendEmail(usuari,"\[NOTIFICANGUR\]: ", '',{htmlBody:emailTxt});
   MailApp.sendEmail(teacherMail,"\[NOTIFICANGUR\]: " + usuari, '',{htmlBody:emailTxt});
+}
+
+function encryptUser(userCell){
+  
 }
 
 function onOpen() {
