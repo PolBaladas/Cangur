@@ -29,7 +29,7 @@ function notificaMeLa() {
   var testLevel = sheet.getRange(lastRow, 4).getValue();
 
   var usuariCell = sheet.getRange(lastRow, 2).getCell(1, 1);
-  var profCell = sheet.getRange(lastRow, lastColumn-1).getCell(1,1);
+  var profCell = sheet.getRange(lastRow, lastColumn-2).getCell(1,1);
   usuari = usuariCell.getValue();
   prof = profCell.getValue();
   encryptData(usuariCell);
