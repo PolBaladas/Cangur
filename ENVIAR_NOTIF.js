@@ -48,7 +48,8 @@ function notificaMeLa() {
   var nota = (correctAnswersNum/30)*10;
   var percentNota = (correctAnswersNum/30)*100;
   
-  sendMails(usuari,prof,nota,testYear,testLevel);
+  sendMail(usuari,'user',nota,testYear,testLevel);
+  sendMail(prof, 'teacher',nota, testYear, testLevel);
   //omplirFull(txtDocProf,prof);
 }
 
@@ -90,7 +91,7 @@ function pushCorrectAnswer(n, val){
   notaFinal+=valor;
   resultLogChain = "P"+n+1+": "+studentAnswers[n]+" (OK)";
   resultsCompilation.push(resultLogChain);
-  correctAnswers.push("P"+n+1);
+  correctAnswers.push("P"+n+2);
 }
 
 function pushIncorrectAnswer(n, val){
@@ -98,7 +99,7 @@ function pushIncorrectAnswer(n, val){
   notaFinal = notaFinal-valor/4;
   resultLogChain = "** P"+n+1+": "+studentAnswers[n]+" ("+ realResults[n]+")";
   resultsCompilation.push(resultLogChain);
-  incorrectAnswers.push("P"+n+1);
+  incorrectAnswers.push("P"+n+2);
 }
 
 function pushBlankAnswer(n){
@@ -106,7 +107,7 @@ function pushBlankAnswer(n){
   notaFinal = notaFinal;
   resultLogChain = "** P"+n+1+": "+studentAnswers[n]+" ("+ realResults[n]+")";
   resultsCompilation.push(resultLogChain);
-  blankAnswers.push("P"+n+1);
+  blankAnswers.push("P"+n+2);
 }
 
 function getKey(year,level){
@@ -143,7 +144,7 @@ function getLevelRow(requestedLevel, yearRow){
   return lvlRow-1;
 }
 
-function sendMails(usuari, prof, nota,testYear, testLevel){
+function sendMail(usuari, kind,nota,testYear, testLevel){
   var markers = ['%user%','%user%','%testYear%','%testLevel%','%notaFinal%',
   '%1to10%','%11to20%','%21to30%','%blankNum%','%correctAnswers%',
   '%incorrectAnswers%','%blankAnswers%'];
@@ -151,15 +152,21 @@ function sendMails(usuari, prof, nota,testYear, testLevel){
           twoValuedAnswers.length, threeValuedAnswers.length,blankAnswers.length, 
          correctAnswers, incorrectAnswers, blankAnswers];
   
-  var docId = '1UJCuEos8KerbxSJnl14ttTOH-zIVHm5gNybeS8Dz9xY'
-  var emailTxt = DocumentApp.openById(docId).getBody().getText();
+  var docId = '1UJCuEos8KerbxSJnl14ttTOH-zIVHm5gNybeS8Dz9xY';
+  var profdocId = '1HBZnFFht3VCZMMqLu4GhM_knoAqSDCc-bgqvH9l9LlU';
+  if(kind='user'){
+    var emailTxt = DocumentApp.openById(docId).getBody().getText();
+  }else{
+    var emailTxt = DocumentApp.openById(docId).getBody().getText();
+  }
+  
+  
   for(var k=0; k<markers.length; k++){
     emailTxt = emailTxt.replace(markers[k], vars[k]);
   }
-  //TODO : Different e-mails for teachers and students?
   var teacherMail = prof + "@sarria.epiaedu.cat";
   MailApp.sendEmail(usuari,"\[NOTIFICANGUR\]: ", '',{htmlBody:emailTxt});
-  MailApp.sendEmail(teacherMail,"\[NOTIFICANGUR\]: " + usuari, '',{htmlBody:emailTxt});
+  
 }
 
 
