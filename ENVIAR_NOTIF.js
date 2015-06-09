@@ -10,7 +10,6 @@ var blankAnswers = new Array();
 var oneValuedAnswers = new Array();
 var twoValuedAnswers = new Array();
 var threeValuedAnswers = new Array();
-
 var resultLogChain = "";
 var valor = 0;
 var notaFinal = 30;
@@ -50,7 +49,6 @@ function notificaMeLa() {
   
   sendMail(usuari,'user',nota,testYear,testLevel);
   sendMail(prof, 'teacher',nota, testYear, testLevel);
-  //omplirFull(txtDocProf,prof);
 }
 
 function processAnswer(n,num){
@@ -58,20 +56,19 @@ function processAnswer(n,num){
     if(studentAnswers[n]==realResults[n]){       //Correct answer
       if(n>=0 && n<10){
         valor = 3;
-        oneValuedAnswers.push("P"+num);
+        oneValuedAnswers.push("P"+(num+1));
       }
       else if(n>=10 && n<20){
         valor = 4;
-        twoValuedAnswers.push("P"+num);
+        twoValuedAnswers.push("P"+(num+1));
       }
       else if(n>=20 && n<30){
         valor = 5;
-        threeValuedAnswers.push("P"+num);
+        threeValuedAnswers.push("P"+(num+1));
       }
       
       pushCorrectAnswer(n,valor);
     }
-    
     else{                                                   //Incorrect Answer
       if(n>=0 && n<11){valor = 3;}
       else if(n>=11 && n<21){valor = 4;}
@@ -79,7 +76,6 @@ function processAnswer(n,num){
       pushIncorrectAnswer(n,valor)
     }
   }
-  
   else{                                                   //Blank Answer
     pushBlankAnswer(n)
   }
@@ -88,18 +84,18 @@ function processAnswer(n,num){
 
 function pushCorrectAnswer(n, val){
   correctAnswersNum+=1;
-  notaFinal+=valor;
+  notaFinal+=val;
   resultLogChain = "P"+n+1+": "+studentAnswers[n]+" (OK)";
   resultsCompilation.push(resultLogChain);
-  correctAnswers.push("P"+n+2);
+  correctAnswers.push("P"+n);
 }
 
 function pushIncorrectAnswer(n, val){
   incorrectAnswersNum+=1;
-  notaFinal = notaFinal-valor/4;
+  notaFinal = notaFinal-val/4;
   resultLogChain = "** P"+n+1+": "+studentAnswers[n]+" ("+ realResults[n]+")";
   resultsCompilation.push(resultLogChain);
-  incorrectAnswers.push("P"+n+2);
+  incorrectAnswers.push("P"+n);
 }
 
 function pushBlankAnswer(n){
@@ -107,7 +103,7 @@ function pushBlankAnswer(n){
   notaFinal = notaFinal;
   resultLogChain = "** P"+n+1+": "+studentAnswers[n]+" ("+ realResults[n]+")";
   resultsCompilation.push(resultLogChain);
-  blankAnswers.push("P"+n+2);
+  blankAnswers.push("P"+n);
 }
 
 function getKey(year,level){
@@ -157,14 +153,13 @@ function sendMail(usuari, kind,nota,testYear, testLevel){
   if(kind='user'){
     var emailTxt = DocumentApp.openById(docId).getBody().getText();
   }else{
-    var emailTxt = DocumentApp.openById(docId).getBody().getText();
+    var emailTxt = DocumentApp.openById(profdocId).getBody().getText();
   }
   
   
   for(var k=0; k<markers.length; k++){
     emailTxt = emailTxt.replace(markers[k], vars[k]);
   }
-  var teacherMail = prof + "@sarria.epiaedu.cat";
   MailApp.sendEmail(usuari,"\[NOTIFICANGUR\]: ", '',{htmlBody:emailTxt});
   
 }
