@@ -17,32 +17,63 @@
   }
 </script>
 
+<style type="text/css">
+   p, select{
+     display:inline;
+   }
+</style>
+
+
 <div id="formDiv">
-<!-- Form div will be hidden after form submission -->
-<form id="myForm">
+  <form id="myForm">
+    
+    <div id="testYear">
+      <p>Any de la prova :</p>
+      <select name="year">
+        <?
+          for (var i = 1998; i < 2015; i++) { ?>
+            <option value="<?=i?>"><?=i?></option>
+          <? }
+        ?>
+      </select>
+    </div>
   
-  <select name="year">
-    <?
-    for (var i = 1998; i < 2015; i++) { ?>
-      <option value="<?=i?>"><?=i?></option>
-    <? }
-    ?>
-  </select>
+    <div id='testLevel'>
+      <p>Nivell de la prova :</p>
+      <select name="level">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+    </div>
   
-  <select name="level">
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-  </select>
+  <div id="testQuestion">
+      <p>Preguntes a analitzar :</p>
+      <select name="question">
+        <option value="1to10">1-10</option>
+        <option value="11to20">11-20</option>
+        <option value="21to30">21-30</option>
+        <?
+          for (var i = 0; i < 30; i++) { ?>
+            <option value="<?=i?>"><?=i?></option>
+          <? }
+        ?>
+      </select>
+    </div>
   
-  <select name="escola">
-    <?
-    for (var i = 0; i < escoles.length; i++) { ?>
-      <option value="<?=i?>"><?=escoles[i]?></option>
-    <? }
-    ?>
-  </select>
+  <div name='testSchool'>
+    <p>Escola : </p>
+    <select name="escola">
+      <?
+        for (var i = 0; i < escoles.length; i++) { ?>
+          <option value="<?=i?>"><?=escoles[i]?></option>
+        <? }
+      ?>
+      <option value="totes">Totes</option>
+    </select>  
+  </div>    
+  
   
   <input type="button" value="Analitzar"
       onclick="toggle_visibility('formDiv'); toggle_visibility('inProgress');
