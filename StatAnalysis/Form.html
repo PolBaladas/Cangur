@@ -1,0 +1,32 @@
+<script>
+  // Javascript function called by "submit" button handler,
+  // to show results.
+  function updateOutput(resultHtml) {
+    toggle_visibility('inProgress');
+    var outputDiv = document.getElementById('output');
+    outputDiv.innerHTML = resultHtml;
+  }
+</script>
+
+<div id="formDiv">
+<!-- Form div will be hidden after form submission -->
+<form id="myForm">
+  
+  <input type='text' name="name"/>
+  
+  <input type="button" value="Analitzar"
+      onclick="toggle_visibility('formDiv'); toggle_visibility('inProgress');
+        google.script.run
+          .withSuccessHandler(updateOutput)
+          .processForm(this.parentNode)" />
+</form>
+</div>
+
+<div id="inProgress" style="display: none;">
+<!-- Progress starts hidden, but will be shown after form submission. -->
+Calculant Estadístiques...
+</div>
+
+<div id="output">
+  <!-- Blank div will be filled with "Thanks.html" after form submission. -->
+</div>
