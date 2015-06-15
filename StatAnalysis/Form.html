@@ -51,6 +51,7 @@
   <div id="testQuestion">
       <p>Preguntes a analitzar :</p>
       <select name="question">
+        <option value="totes">Totes</option>
         <option value="1to10">1-10</option>
         <option value="11to20">11-20</option>
         <option value="21to30">21-30</option>
@@ -65,12 +66,12 @@
   <div name='testSchool'>
     <p>Escola : </p>
     <select name="escola">
+      <option value="totes">Totes</option>
       <?
         for (var i = 0; i < escoles.length; i++) { ?>
           <option value="<?=i?>"><?=escoles[i]?></option>
         <? }
       ?>
-      <option value="totes">Totes</option>
     </select>  
   </div>    
   
