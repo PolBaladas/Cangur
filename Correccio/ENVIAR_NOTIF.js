@@ -53,7 +53,7 @@ function notificaMeLa() {
 
 function processAnswer(n,num){
   if(studentAnswers[n]!=""){
-    if(studentAnswers[n]==realResults[n]){       //Correct answer
+    if(studentAnswers[n]==realResults[n]|| realResults[n].indexOf(studentAnswers[n])!=-1){       //Correct answer
       if(n>=0 && n<10){
         valor = 3;
         oneValuedAnswers.push("P"+(num+1));
@@ -87,7 +87,7 @@ function pushCorrectAnswer(n, val){
   notaFinal+=val;
   resultLogChain = "P"+n+1+": "+studentAnswers[n]+" (OK)";
   resultsCompilation.push(resultLogChain);
-  correctAnswers.push("P"+n);
+  correctAnswers.push("P"+(n+1));
 }
 
 function pushIncorrectAnswer(n, val){
@@ -95,7 +95,7 @@ function pushIncorrectAnswer(n, val){
   notaFinal = notaFinal-val/4;
   resultLogChain = "** P"+n+1+": "+studentAnswers[n]+" ("+ realResults[n]+")";
   resultsCompilation.push(resultLogChain);
-  incorrectAnswers.push("P"+n);
+  incorrectAnswers.push("P"+(n+1));
 }
 
 function pushBlankAnswer(n){
@@ -103,7 +103,7 @@ function pushBlankAnswer(n){
   notaFinal = notaFinal;
   resultLogChain = "** P"+n+1+": "+studentAnswers[n]+" ("+ realResults[n]+")";
   resultsCompilation.push(resultLogChain);
-  blankAnswers.push("P"+n);
+  blankAnswers.push("P"+(n+1));
 }
 
 function getKey(year,level){

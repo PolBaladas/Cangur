@@ -5,7 +5,8 @@ function doGet(e) {
   return template.evaluate();
 }
 
-function processForm(form) {
+//Like the "post" (query) function:
+function queryFromForm(form) {
   // Fill in response template
   var template = HtmlService.createTemplateFromFile('Result.html');
   var keys = getAnalytics(form);
@@ -16,7 +17,7 @@ function processForm(form) {
 function getAnalytics(form){
   var keys = [];
   logForm(form);
-  var answers = getAnswers(parseInt(form.year), parseInt(form.level));
+  var correct_answers = getAnswers(parseInt(form.year), parseInt(form.level), form.questions);
   Logger.log(answers);
   keys[0] = answers;
   return keys;
@@ -30,13 +31,25 @@ function logForm(form){
   Logger.log(escoles[form.escola])
 }
 
-function getAnswers(year,level){
+function getAnswers(year,level, questions){
   var ss = SpreadsheetApp.openById('1hnh4O4GiWQH8yJtppSdyy3SaVNXDZAx5YX9o-0Jc5AE');
   var keySheetName = ss.getSheets()[1].getName();
   var sheet = ss.setActiveSheet(ss.getSheetByName(keySheetName).activate());
 
   var firstkeyRow = getFirstKeyRow(year,level,sheet)
-  var key = sheet.getSheetValues(firstkeyRow, 3, 1, 30)[0].valueOf();
+  var startColumn = 3;
+  var numColumns = 30;
+  if(questions!='Totes'){
+    if(questions.length()==1){
+      numColumns=1;
+      startColumn = parseInt(questions);
+    }
+    else{
+      numColumns = 10;
+      startColumn = parseInt(questions.slice(0,2));
+    }
+  }
+  var key = sheet.getSheetValues(firstkeyRow, startColumn, 1, numColumns)[0].valueOf();
   return key;
 }
 
