@@ -31,7 +31,7 @@
       <p>Any de la prova :</p>
       <select name="year">
         <?
-          for (var i = 1998; i < 2015; i++) { ?>
+          for (var i = 1999; i < 2015; i++) { ?>
             <option value="<?=i?>"><?=i?></option>
           <? }
         ?>
@@ -48,28 +48,18 @@
       </select>
     </div>
   
-  <div id="testQuestion">
-      <p>Preguntes a analitzar :</p>
-      <select name="question">
-        <option value="totes">Totes</option>
-        <option value="1to10">1-10</option>
-        <option value="11to20">11-20</option>
-        <option value="21to30">21-30</option>
-        <?
-          for (var i = 0; i < 30; i++) { ?>
-            <option value="<?=i?>"><?=i?></option>
-          <? }
-        ?>
-      </select>
-    </div>
+ <div id="testQuestion">
+  Preguntes a analitzar: <input type="text" name="questions"><br> 
+  <p>(Introdueix una pregunta individual Ex: 2 o un interval. Ex: 10-20)<p>
+ </div>
   
   <div name='testSchool'>
     <p>Escola : </p>
     <select name="escola">
-      <option value="totes">Totes</option>
+      <option value="Totes">Totes</option>
       <?
         for (var i = 0; i < escoles.length; i++) { ?>
-          <option value="<?=i?>"><?=escoles[i]?></option>
+          <option value="<?=escoles[i]?>"><?=escoles[i]?></option>
         <? }
       ?>
     </select>  
@@ -80,7 +70,7 @@
       onclick="toggle_visibility('formDiv'); toggle_visibility('inProgress');
         google.script.run
           .withSuccessHandler(updateOutput)
-          .processForm(this.parentNode)" />
+          .queryFromForm(this.parentNode)" />
 </form>
 </div>
 

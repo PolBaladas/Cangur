@@ -1,19 +1,40 @@
 <style type='text/css'>
-    .results h1{
-        text-align:center;
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
     }
+  
 </style>
 
 <div class="results">
-    <h1>Resultats estadístics</h1>
     <table style="width:100%">
+        <tr>
+            <th>Pregunta</th>
+            <th>Resposta Correcte</th>      
+            <th>A (%)</th>
+            <th>B (%)</th>
+            <th>C (%)</th>
+            <th>D (%)</th>
+            <th>E (%)</th>
+            <th>F (%)</th>
+            <th>G (%)</th>
+            <th>% Encert a Catalunya</th>
+        </tr> 
         <?
-        for (var i = 0; i < 30; i++) { ?>
-            <tr>
-                <td><p>Pregunta <?=i+1?></p></td>
-                <td><?=keys[0][i]?></td>		
+        var j=1;
+        var start = keys[0][0];
+        var stop = 0;
+        if(keys[0].length==2){stop=start+1;}
+        else{stop = start+parseInt(keys[0].length)-1;}
+        for(var i=start; i <stop ; i++) { ?>
+            <tr align="center">
+                <td><?=i?></td>
+                <td><?=keys[0][j]?></td>
+                <?for(var k=0; k<8; k++){?>
+                <td><?=keys[1][j-1][k]?></td>
+                <?}?>
+                <?j+=1;?>
             </tr>
-        <? }
-        ?>
+        <?}?>
     </table>
 </div>
