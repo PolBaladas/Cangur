@@ -150,10 +150,10 @@ function sendMail(usuari, kind,nota,testYear, testLevel){
   
   var docId = '1UJCuEos8KerbxSJnl14ttTOH-zIVHm5gNybeS8Dz9xY';
   var profdocId = '1HBZnFFht3VCZMMqLu4GhM_knoAqSDCc-bgqvH9l9LlU';
-  if(kind='user'){
+  if(kind=='user'){
     var emailTxt = DocumentApp.openById(docId).getBody().getText();
   }
-  if(kind='teacher'){
+  if(kind=='teacher'){
     var emailTxt = DocumentApp.openById(profdocId).getBody().getText();
   }
   

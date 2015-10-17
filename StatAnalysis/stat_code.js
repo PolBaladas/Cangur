@@ -29,9 +29,9 @@ function getAnalytics(form){
   correct_answers = getCorrectAnswers(any, level, questions);
   correctAnswers = correct_answers;
   var stats = getAnswerStatistics(any, level, questions, escola);
-  Logger.log(correct_answers);
   keys[0] = correct_answers;
   keys[1] = stats;
+  Logger.log(keys);
   return keys;
 }
 
@@ -72,12 +72,15 @@ function getAnswerStatistics(any, lvl, questions, escola){
   }
   else{
     var interval = questions.split('-');
-    var start = parseInt(interval[0])+2;
-    var end =  parseInt(interval[1])+1;
+    var start = parseInt(interval[0]);
+    var end =  parseInt(interval[1]);
+    Logger.log(start);
+    Logger.log(end)
     for(var i=start; i<=end; i++){
-      stats.push(getSingleQuestionStats(any,lvl,i, escola))
+      stats.push(getSingleQuestionStats(any,lvl,i, escola));
     }
   }
+  Logger.log(stats)
   return stats;
 }
 
@@ -88,18 +91,22 @@ function getSingleQuestionStats(any, lvl, question_number, escola){
   var data = ss.getRange(2, 4+question_number, ss.getLastRow()-1, 1).getValues();
   var correct_answer = getSingleAnswerByNumber(question_number);
   var cat_counter = 0;
+  var cat_total = 0;
   var query_total = 0;
   
   for(var i in data){
-    if(any==parseInt(anys[i]) && lvl==parseInt(lvls[i]) && data[i].toString()==correct_answer){cat_counter+=1;}
-    if(any==parseInt(anys[i]) && lvl==parseInt(lvls[i]) && escoles[i]==escola){
-      stats[letter_index.indexOf(data[i].toString())]=stats[letter_index.indexOf(data[i].toString())]+1;
-      query_total+=1;
+    if(any==parseInt(anys[i]) && lvl==parseInt(lvls[i])){
+      if(data[i].toString()==correct_answer){cat_counter+=1;}
+      if(escoles[i]==escola){
+        stats[letter_index.indexOf(data[i].toString())]=stats[letter_index.indexOf(data[i].toString())]+1;
+        query_total+=1;
+      }
+      cat_total+=1;
     }
-   }
+  }
   
   for(var j in stats){stats[j]=stats[j]*100/query_total}
-  stats[7]=cat_counter*100/(data.length);
+  stats[7]=cat_counter*100/(cat_total);
   return stats;
 }
 

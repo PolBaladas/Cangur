@@ -22,17 +22,16 @@
         </tr> 
         <?
         var j=1;
-        var start = keys[0][0];
-        var stop = 0;
-        if(keys[0].length==2){stop=start+1;}
-        else{stop = start+parseInt(keys[0].length)-1;}
-        for(var i=start; i <stop ; i++) { ?>
+        var start = parseInt(keys[0][0]);
+        for(i in keys[1]) { ?>
             <tr align="center">
-                <td><?=i?></td>
+                <td><?=start+parseInt(i)?></td>
                 <td><?=keys[0][j]?></td>
+                
                 <?for(var k=0; k<8; k++){?>
-                <td><?=keys[1][j-1][k]?></td>
+                <td><?=keys[1][j-1][k];?></td>
                 <?}?>
+                
                 <?j+=1;?>
             </tr>
         <?}?>
