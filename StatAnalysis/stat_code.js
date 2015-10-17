@@ -97,7 +97,7 @@ function getSingleQuestionStats(any, lvl, question_number, escola){
   for(var i in data){
     if(any==parseInt(anys[i]) && lvl==parseInt(lvls[i])){
       if(data[i].toString()==correct_answer){cat_counter+=1;}
-      if(escoles[i]==escola){
+      if(escoles[i]==escola || escola=="Totes"){
         stats[letter_index.indexOf(data[i].toString())]=stats[letter_index.indexOf(data[i].toString())]+1;
         query_total+=1;
       }
