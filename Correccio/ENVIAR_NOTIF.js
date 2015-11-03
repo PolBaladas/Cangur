@@ -28,7 +28,7 @@ function notificaMeLa() {
   var testLevel = sheet.getRange(lastRow, 4).getValue();
 
   var usuariCell = sheet.getRange(lastRow, 2).getCell(1, 1);
-  var profCell = sheet.getRange(lastRow, lastColumn-3).getCell(1,1);
+  var profCell = sheet.getRange(lastRow, lastColumn-2).getCell(1,1);
   usuari = usuariCell.getValue();
   prof = profCell.getValue();
   encryptData(usuariCell);
@@ -169,9 +169,9 @@ function sendMail(usuari, kind,nota,testYear, testLevel){
 function encryptData(dataCell){
   var plain = dataCell.getValue();
   var saltedPlain = plain+generateSalt(20);
-  Logger.log(saltedPlain)
   var hash = Sha256.hash(saltedPlain);
   dataCell.setValue(hash);
+  Logger.log(plain, hash);
 }
 
 function generateSalt(length) {
