@@ -21,25 +21,25 @@
    p, select{
      display:inline;
    }
+   
+   p{
+    font-family:'trebuchet ms', sans-serif;
+    
+    }
 </style>
 
 
 <div id="formDiv">
   <form id="myForm">
-    
     <div id="testYear">
-      <p>Any de la prova :</p>
+      <p>Any de la prova:</p>
       <select name="year">
         <?
           for (var i = 1999; i < 2015; i++) { ?>
             <option value="<?=i?>"><?=i?></option>
           <? }
         ?>
-      </select>
-    </div>
-  
-    <div id='testLevel'>
-      <p>Nivell de la prova :</p>
+      </select><p>  Nivell de la prova:</p>
       <select name="level">
         <option value="1">1</option>
         <option value="2">2</option>
@@ -47,14 +47,14 @@
         <option value="4">4</option>
       </select>
     </div>
-  
+    <br>
  <div id="testQuestion">
-  Preguntes a analitzar: <input type="text" name="questions"><br> 
-  <p>(Introdueix una pregunta individual Ex: 2 o un interval. Ex: 10-20)<p>
+  <p>Preguntes de què voleu obtenir l'anàlisi: <p><input type="text" name="questions" placeholder="1-30" value="1-30"><br> 
+  <p>(Introduïu una pregunta individual, per exemple "2"; o un interval, per exemple, "10-20")<p>
  </div>
-  
+  <br>
   <div name='testSchool'>
-    <p>Escola : </p>
+    <p>Escola: </p>
     <select name="escola">
       <option value="Totes">Totes</option>
       <?
@@ -65,7 +65,7 @@
     </select>  
   </div>    
   
-  
+  <br>
   <input type="button" value="Analitzar"
       onclick="toggle_visibility('formDiv'); toggle_visibility('inProgress');
         google.script.run
@@ -76,7 +76,7 @@
 
 <div id="inProgress" style="display: none;">
 <!-- Progress starts hidden, but will be shown after form submission. -->
-Calculant Estadístiques...
+S'està duent a terme el càlcul de les estadístiques demanades...
 </div>
 
 <div id="output">

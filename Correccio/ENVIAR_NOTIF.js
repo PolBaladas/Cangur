@@ -47,8 +47,8 @@ function notificaMeLa() {
   var nota = (correctAnswersNum/30)*10;
   var percentNota = (correctAnswersNum/30)*100;
   
-  sendMail(usuari,'user',nota,testYear,testLevel);
-  sendMail(prof, 'teacher',nota, testYear, testLevel);
+  sendMail(usuari,usuari,'user',nota,testYear,testLevel);
+  sendMail(prof,usuari, 'teacher',nota, testYear, testLevel);
 }
 
 function processAnswer(n,num){
@@ -140,7 +140,7 @@ function getLevelRow(requestedLevel, yearRow){
   return lvlRow-1;
 }
 
-function sendMail(usuari, kind,nota,testYear, testLevel){
+function sendMail(direccio,usuari, kind,nota,testYear, testLevel){
   var markers = ['%user%','%user%','%testYear%','%testLevel%','%notaFinal%',
   '%1to10%','%11to20%','%21to30%','%blankNum%','%correctAnswers%',
   '%incorrectAnswers%','%blankAnswers%'];
@@ -161,7 +161,7 @@ function sendMail(usuari, kind,nota,testYear, testLevel){
   for(var k=0; k<markers.length; k++){
     emailTxt = emailTxt.replace(markers[k], vars[k]);
   }
-  MailApp.sendEmail(usuari,"\[NOTIFICANGUR\]: ", '',{htmlBody:emailTxt});
+  MailApp.sendEmail(direccio,"\[NOTIFICANGUR\]: ", '',{htmlBody:emailTxt, name:'Proves Cangur'});
   
 }
 
